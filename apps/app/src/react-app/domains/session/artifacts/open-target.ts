@@ -243,6 +243,15 @@ export function deriveOpenTargets(messages: UIMessage[], options: DeriveOpenTarg
         continue;
       }
 
+      if (part.type === "source-document") {
+        if (part.filename) {
+          addTarget(targets, targetFromFile(part.filename, 95, "attachment source"));
+        } else {
+          addTarget(targets, targetFromFile(part.title, 95, "attachment source"));
+        }
+        continue;
+      }
+
       if (part.type !== "dynamic-tool") {
         continue;
       }

@@ -75,6 +75,24 @@ describe("deriveOpenTargets", () => {
     expect(targets[0]).toMatchObject({ value: "reports/summary.md", preview: "markdown", confidence: 95 });
   });
 
+  it("extracts artifact targets from attachment sources", () => {
+    const targets = deriveOpenTargets([
+      {
+        id: "msg_attachment",
+        role: "assistant",
+        parts: [{
+          type: "source-document",
+          sourceId: "attachment-source",
+          mediaType: "text/csv",
+          title: "customers.csv",
+          filename: "reports/customers.csv",
+        }],
+      },
+    ]);
+
+    expect(targets[0]).toMatchObject({ value: "reports/customers.csv", preview: "sheet", confidence: 95 });
+  });
+
   it("does not extract file artifacts from read tool metadata or output", () => {
     const targets = deriveOpenTargets([
       toolMessage(
